@@ -39,8 +39,7 @@ public class Operations {
 
 		// Caucula a distância euclidiana entre dois pontos da pata,
 		// para encontrar o seu comprimento.
-		double distance = Math
-			.sqrt(Math.pow(pointA.x() - pointB.x(), 2)
+		int distance = (int) Math .sqrt(Math.pow(pointA.x() - pointB.x(), 2) /* */
 				+ Math.pow(pointA.y() - pointB.y(), 2));
 		if (pawLength == null || distance > pawLength.getDistance()) {
 		    pawLength = new BigDistance(distance, pointA, pointB);
@@ -50,54 +49,43 @@ public class Operations {
 	return pawLength;
     }
 
-    private static int radianToDegressRotate(double radians,
-	    Orientation orientation) {
+    public static int radianToDegressRotate(double radians, Orientation orientation) {
 	int degress = (int) (radians * (180 / Math.PI));
 	if (orientation == Orientation.VERTICAL) {
-	    if (degress > 90) {
-		return 90 - degress;
-	    } else {
-		return 270 - degress;
-	    }
+		if (degress > 90) {
+			return 90 - degress;
+		} else {
+			return 270 - degress;
+		}
 	} else {
-	    return 180 - degress;
+		return (180 - degress) - 90;
 	}
     }
 
-    public static IplImage rotate(IplImage src, int angle) {
-	IplImage img = IplImage.create(src.roi().height(), src.roi().width(),
-		src.depth(), src.nChannels());
-
-	cvTranspose(src, img);
-	cvFlip(img, img, 0);
-	return img;
-    }
-
-    public static IplImage rotateImage(IplImage src, double angleDegrees) {
+    public static IplImage rotateImage(IplImage src, double angleDegrees,
+	    Orientation originalOrientation) {
 	// Create a map_matrix, where the left 2x2 matrix
 	// is the transform and the right 2x1 is the dimensions.
-	float[] m = new float[6];
 	CvMat M = CvMat.create(2, 3, CV_32F);
 	int w = src.roi().width();
 	int h = src.roi().height();
 	double angleRadians = angleDegrees * (Math.PI / 180.0f);
-	m[0] = (float) (Math.cos(angleRadians));
-	m[1] = (float) (Math.sin(angleRadians));
-	m[3] = -m[1];
-	m[4] = m[0];
-	m[2] = w * 0.5f;
-	m[5] = h * 0.5f;
-	M.put(0, m[0]);
-	M.put(1, m[1]);
-	M.put(2, m[2]);
-	M.put(3, m[3]);
-	M.put(4, m[4]);
-	M.put(5, m[5]);
+	M.put(0, (float) (Math.cos(angleRadians)));
+	M.put(1, (float) (Math.sin(angleRadians)));
+	M.put(2, w * 0.5f);
+	M.put(3, -(float) (Math.sin(angleRadians)));
+	M.put(4, (float) (Math.cos(angleRadians)));
+	M.put(5, h * 0.5f);
 
 	// Make a spare image for the result
 	CvSize sizeRotated = new CvSize();
-	sizeRotated.width(Math.round(w));
-	sizeRotated.height(Math.round(h));
+	if (originalOrientation == Orientation.VERTICAL) {
+	    sizeRotated.width(Math.round(w));
+	    sizeRotated.height(Math.round(h));
+	} else {
+	    sizeRotated.width(Math.round(h));
+	    sizeRotated.height(Math.round(w));
+	}
 
 	// Rotate
 	IplImage imageRotated = cvCreateImage(sizeRotated, src.depth(),
