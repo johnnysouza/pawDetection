@@ -20,24 +20,12 @@ public class PawDimension {
 	return pawWidth;
     }
 
-    public void setPawWidth(double pawWidth) {
-	this.pawWidth = pawWidth;
-    }
-
     public double getPawHeight() {
 	return pawHeight;
     }
 
-    public void setPawHeight(double pawHeight) {
-	this.pawHeight = pawHeight;
-    }
-
     public IplImage getPaw() {
-        return paw;
-    }
-
-    public void setPaw(IplImage paw) {
-        this.paw = paw;
+	return paw;
     }
 
     public void apllyRatio(double pawRatio) {
@@ -47,7 +35,6 @@ public class PawDimension {
 
 	    isRatioAplly = true;
 	}
-
     }
 
 }

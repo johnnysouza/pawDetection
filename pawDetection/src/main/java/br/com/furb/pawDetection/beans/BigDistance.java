@@ -19,31 +19,12 @@ public class BigDistance {
 	return distance;
     }
 
-    public void setDistance(int distance) {
-	this.distance = distance;
-    }
-
     public CvPoint getPointA() {
 	return pointA;
     }
 
-    public void setPointA(CvPoint pointA) {
-	this.pointA = pointA;
-    }
-
     public CvPoint getPointB() {
 	return pointB;
-    }
-
-    public void setPointB(CvPoint pointB) {
-	this.pointB = pointB;
-    }
-
-    @Override
-    public String toString() {
-	return "PawLength [distance=" + distance + ", pointA=(" + pointA.x()
-		+ ", " + pointA.y() + "), pointB=(" + pointB.x() + ", "
-		+ pointB.y() + ")]";
     }
 
 }

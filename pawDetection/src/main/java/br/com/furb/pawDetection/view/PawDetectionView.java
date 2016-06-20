@@ -1,9 +1,6 @@
 package br.com.furb.pawDetection.view;
 
 import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -90,23 +87,7 @@ public class PawDetectionView extends JFrame {
 	menuLoadImage.addActionListener(new ActionListener() {
 	    
 	    public void actionPerformed(ActionEvent e) {
-		JFileChooser loadImage = new JFileChooser();
-		loadImage.setFileFilter(new FileNameExtensionFilter("Images", new String[] {"jpg", "jpeg", "png"}));
-		int loadImageRet = loadImage.showOpenDialog(contentPane);
-		
-		if (loadImageRet == JFileChooser.APPROVE_OPTION) {
-		    btnProcess.setEnabled(true);
-		    
-		    imageFile  = loadImage.getSelectedFile();
-		    BufferedImage image = new BufferedImage(150, 150, BufferedImage.TYPE_3BYTE_BGR);
-		    try {
-			image = ImageIO.read(imageFile);
-			srcImage.setImage(image);
-			srcImage.repaint();
-		    } catch (Exception ex) {
-			JOptionPane.showMessageDialog(contentPane, "Falha na carga do arquivo");
-		    }
-		}
+		loadFile();
 	    }
 	});
 	menuActions.add(menuLoadImage);
@@ -171,7 +152,27 @@ public class PawDetectionView extends JFrame {
 
     }
     
-    protected void process() {
+    private void loadFile() {
+	JFileChooser loadImage = new JFileChooser();
+	loadImage.setFileFilter(new FileNameExtensionFilter("Images", new String[] {"jpg", "jpeg", "png"}));
+	int loadImageRet = loadImage.showOpenDialog(contentPane);
+	
+	if (loadImageRet == JFileChooser.APPROVE_OPTION) {
+	    btnProcess.setEnabled(true);
+	    
+	    imageFile  = loadImage.getSelectedFile();
+	    BufferedImage image = new BufferedImage(150, 150, BufferedImage.TYPE_3BYTE_BGR);
+	    try {
+		image = ImageIO.read(imageFile);
+		srcImage.setImage(image);
+		srcImage.repaint();
+	    } catch (Exception ex) {
+		JOptionPane.showMessageDialog(contentPane, "Falha na carga do arquivo");
+	    }
+	}
+    }
+
+    private void process() {
 	PawDetection pawDetection = new PawDetection(imageFile.getAbsolutePath(), chkDebugMode.isSelected());
 	IplImage greenChannel = pawDetection.separateGreenChannel();
 	IplImage mouseThresholding = pawDetection.getMouseThresholding(greenChannel);
@@ -186,7 +187,7 @@ public class PawDetectionView extends JFrame {
 	IplImage dilate = pawDetection.getFilterPaws(mouseThresholding);
 	PawDimension[] pawDimensions = pawDetection.findPaws(dilate);
 	
-	int ratio = PawDetection.difeneRatio(mouseThresholding, greenChannel);
+	int ratio = PawDetection.difineRatio(mouseThresholding, greenChannel);
 	
 	StringBuilder result = new StringBuilder();
 	for (int i = 0; i < pawDimensions.length; i++) {
