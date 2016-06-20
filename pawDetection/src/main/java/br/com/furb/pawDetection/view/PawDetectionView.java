@@ -38,10 +38,10 @@ public class PawDetectionView extends JFrame {
     private JPanel contentPane;
     private File imageFile;
     private JButton btnProcess;
-    private ImagemPanel srcImage;
-    private ImagemPanel mouseImage;
-    private ImagemPanel pawImageI;
-    private ImagemPanel pawImageII;
+    private ImagePanel srcImage;
+    private ImagePanel mouseImage;
+    private ImagePanel pawImageI;
+    private ImagePanel pawImageII;
     private JCheckBox chkDebugMode;
     private JTextArea textResult;
 
@@ -73,7 +73,7 @@ public class PawDetectionView extends JFrame {
 	setContentPane(contentPane);
 	contentPane.setLayout(null);
 	
-	srcImage = new ImagemPanel();
+	srcImage = new ImagePanel();
 	srcImage.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 	srcImage.setBounds(10, 30, 150, 150);
 	contentPane.add(srcImage);
@@ -142,7 +142,7 @@ public class PawDetectionView extends JFrame {
 	textResult.setBounds(10, 276, 150, 95);
 	textResult.setEditable(false);
 	contentPane.add(textResult);	
-	mouseImage = new ImagemPanel();
+	mouseImage = new ImagePanel();
 	mouseImage.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 	mouseImage.setBounds(233, 55, 150, 150);
 	contentPane.add(mouseImage);
@@ -151,12 +151,12 @@ public class PawDetectionView extends JFrame {
 	lblSeparaoDoRato.setBounds(233, 30, 150, 14);
 	contentPane.add(lblSeparaoDoRato);
 	
-	pawImageI = new ImagemPanel();
+	pawImageI = new ImagePanel();
 	pawImageI.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 	pawImageI.setBounds(198, 251, 100, 125);
 	contentPane.add(pawImageI);
 	
-	pawImageII = new ImagemPanel();
+	pawImageII = new ImagePanel();
 	pawImageII.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 	pawImageII.setBounds(308, 251, 100, 125);
 	contentPane.add(pawImageII);
@@ -216,37 +216,4 @@ public class PawDetectionView extends JFrame {
 	textResult.setText(result.toString());
     }
 
-    static class ImagemPanel extends JPanel {
-
-	private BufferedImage image;
-	
-	public ImagemPanel() {
-	    image = null;
-	}
-
-	public ImagemPanel(BufferedImage image) {
-	    this.image = image;
-	}
-	
-	public void setImage(BufferedImage image) {
-	    this.image = image;
-	}
-
-	@Override
-	public void paint(Graphics g) {
-	    super.paint(g);
-	    if (image != null) {
-		BufferedImage resized = new BufferedImage(getWidth(), getHeight(), image.getType());
-		Graphics2D graps = resized.createGraphics();
-		graps.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-		    RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		graps.drawImage(image, 0, 0, getWidth(), getHeight(), 0, 0, image.getWidth(),
-			image.getHeight(), null);
-		graps.dispose();
-		
-	    	g.drawImage(resized, 0, 0, getWidth(), getHeight(), null);
-	    }
-	}
-
-    }
 }
